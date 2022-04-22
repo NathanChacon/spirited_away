@@ -156,7 +156,7 @@ let coins = generateCoins(5)
 let enemies = generateEnemies(4)
 let fallingElements = [...coins,...enemies]
 
-let player = playerFactory(100, 100)
+let player = playerFactory(134, 134)
 
 window.onload = () => {
     const restartButton = document.getElementById("restartButton")
@@ -171,7 +171,7 @@ const onClickRestart = () => {
     deadOverlay.classList.remove("dead_overlay--visible")
     deadOverlay.classList.add("dead_overlay--hidden")
 
-    player = playerFactory(100, 100)
+    player = playerFactory(134, 134)
 
     window.requestAnimationFrame(startGame)
 }

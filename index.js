@@ -134,16 +134,21 @@ const playerFactory = (width = 100, height = 100) => {
         width,
         height,
         moveLeft: () => {
-            positionX -= 16
+            positionX -= 12
             player.style.left = positionX + 'px'
             player.classList.remove("player--right")
             player.classList.add("player--left")
+            !player.classList.contains("player--moving") && player.classList.add("player--moving")
         },
         moveRight: () => {
-            positionX += 16
+            positionX += 12
             player.style.left = positionX + 'px'
             player.classList.remove("player--left")
             player.classList.add("player--right")
+            !player.classList.contains("player--moving") && player.classList.add("player--moving")
+        },
+        idle: () => {
+            player.classList.remove("player--moving")
         },
         getPositionX: () => {
             return positionX
@@ -196,6 +201,13 @@ document.addEventListener('keydown', (e) => {
         key === "ArrowLeft" && player.moveLeft()
     }
 })
+
+document.addEventListener('keyup', (e) => {
+    const keyName = e.key
+    if(keyName === "ArrowRight" || keyName === "ArrowLeft"){
+        player.idle()
+    }
+  })
 
 const increasePlayerPoints = () => {
     playerPoints++

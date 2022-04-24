@@ -124,8 +124,50 @@
     opacity: 1;
 }
 
+
+#fly{
+    animation: bird 0.9s infinite;
+    animation-direction: alternate-reverse;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+#dragonHead{
+    animation: dragon_head 1s infinite;
+    animation-direction: alternate;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+
+.player--moving #mask{
+    animation: maskMoving 0.3s infinite;
+    animation-direction: alternate;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+.player--moving #upperBody{
+    animation: bodyMoving 0.3s infinite;
+    animation-direction: alternate;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+@keyframes bird {
+    0%{
+        transform:  rotateZ(0deg) translateY(0px)
+    }
+    50%{
+        transform: rotateZ(9deg) translateY(10px)
+    }
+    100%{
+        transform: rotateZ(-9deg) translateY(11px)
+    }
+}
+
 @keyframes spin {
-    100% { transform: rotate(360deg); } 
+    100% { transform: rotate(360deg)} 
 }
 
 @keyframes bouncing{
@@ -134,5 +176,37 @@
       }
     to {
         transform: translateY(15px);
+    }
+}
+
+@keyframes dragon_head{
+    from {
+        transform: rotateZ(-3deg);
+      }
+    to {
+        transform: rotateZ(3deg);
+    }
+}
+
+
+@keyframes bodyMoving{
+    from{
+        transform: scaleY(1);
+        transform: scaleX(1);
+    }
+
+    to{
+        transform: scaleY(1.2);
+        transform: scaleX(0.9);
+    }
+}
+
+
+@keyframes maskMoving {
+    from {
+        transform: translateY(0px);
+      }
+    to {
+        transform: translateY(11px);
     }
 }

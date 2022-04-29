@@ -65,7 +65,7 @@ const fallingEntityFactory = (domElement, type) => {
     gameContainer.appendChild(domElement)
 
     const isCollidedVertically = () => {
-        if((positionY + elementHeight) >= (document.body.clientHeight - player.height)) {
+        if(Math.floor(domElement.getBoundingClientRect().bottom)  > Math.floor(player.domElement.getBoundingClientRect().top)) {
             return true
         }
     
@@ -73,15 +73,10 @@ const fallingEntityFactory = (domElement, type) => {
     }
 
     const isCollidedHorizontally = () => {
-        const elemetRightSide = positionX + elementWidth
-        const elementLeftSide = positionX
-        const playerLeftSide = Math.floor(player.getPositionX())
-        const playerRightSide = Math.floor(player.getPositionX()) + player.width
-    
-        if(elemetRightSide >= playerLeftSide && elemetRightSide <= playerRightSide){
-            return true
-        }
-        else if(elementLeftSide <= playerRightSide && elementLeftSide >= playerLeftSide){
+        const collidedFromRight = Math.floor(domElement.getBoundingClientRect().right) > Math.floor(player.domElement.getBoundingClientRect().left)
+        const collidedFromLeft = Math.floor(domElement.getBoundingClientRect().left) < Math.floor(player.domElement.getBoundingClientRect().right)
+
+        if(collidedFromLeft && collidedFromRight){
             return true
         }
         
@@ -93,6 +88,8 @@ const fallingEntityFactory = (domElement, type) => {
         restart: () => {
             positionX = getRandomNumber(elementWidth, document.body.clientWidth)
             positionY = -getRandomNumber(elementHeight, 1000)
+            domElement.style.top = positionY + 'px'
+            domElement.style.left = positionX + 'px'
         },
         move: () => {
             positionY += 4
@@ -121,6 +118,7 @@ const fallingEntityFactory = (domElement, type) => {
 
 const playerFactory = (width = 100, height = 100) => {
     const player = document.getElementById("player")
+    let playerDirection = "right"
     player.style.display = "block";
     player.setAttribute("width",`${width}`)
     player.setAttribute("height",`${height}`)
@@ -139,6 +137,7 @@ const playerFactory = (width = 100, height = 100) => {
             player.classList.remove("player--right")
             player.classList.add("player--left")
             !player.classList.contains("player--moving") && player.classList.add("player--moving")
+            playerDirection = "left"
         },
         moveRight: () => {
             positionX += 12
@@ -146,6 +145,14 @@ const playerFactory = (width = 100, height = 100) => {
             player.classList.remove("player--left")
             player.classList.add("player--right")
             !player.classList.contains("player--moving") && player.classList.add("player--moving")
+            playerDirection = "right"
+        },
+        domElement: player,
+        jump: () => {
+            playerDirection === "right" ? player.classList.add("player--jumpRight") : player.classList.add("player--jumpLeft")
+            setTimeout(() => {
+                playerDirection === "right" ? player.classList.remove("player--jumpRight") : player.classList.remove("player--jumpLeft")
+            }, 600)
         },
         idle: () => {
             player.classList.remove("player--moving")
@@ -158,7 +165,7 @@ const playerFactory = (width = 100, height = 100) => {
 }
 
 let coins = generateCoins(5)
-let enemies = generateEnemies(4)
+let enemies = generateEnemies(3)
 let fallingElements = [...coins,...enemies]
 
 let player = playerFactory(134, 134)
@@ -199,6 +206,7 @@ document.addEventListener('keydown', (e) => {
         const key = e.key
         key === "ArrowRight" && player.moveRight()
         key === "ArrowLeft" && player.moveLeft()
+        key === "ArrowUp" && player.jump()
     }
 })
 

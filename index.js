@@ -10,7 +10,7 @@ const getRandomNumber = (min, max) => {
 const generateCoins = (numberOfCoins) => {
   const coins = [];
   for (let i = 0; i < numberOfCoins; i++) {
-    coins.push(fallingEntityFactory(createCoinDomElement(), "coin"));
+    coins.push(fallingEntityFactory(createCoinDomElement(), "coin", 3));
   }
 
   return coins;
@@ -19,7 +19,7 @@ const generateCoins = (numberOfCoins) => {
 const generateEnemies = (numberOfEnemies) => {
   const enemies = [];
   for (let i = 0; i < numberOfEnemies; i++) {
-    enemies.push(fallingEntityFactory(createEnemyDomElement(), "enemy"));
+    enemies.push(fallingEntityFactory(createEnemyDomElement(), "enemy", 3));
   }
 
   return enemies;
@@ -46,7 +46,7 @@ const createEnemyDomElement = () => {
   return figure;
 };
 
-const fallingEntityFactory = (domElement, type) => {
+const fallingEntityFactory = (domElement, type, speed) => {
   let elementWidth = domElement.offsetWidth;
   let elementHeight = domElement.offsetHeight;
 
@@ -93,7 +93,7 @@ const fallingEntityFactory = (domElement, type) => {
       domElement.style.left = positionX + "px";
     },
     move: () => {
-      positionY += 4;
+      positionY += speed;
       domElement.style.top = positionY + "px";
       domElement.style.left = positionX + "px";
     },
@@ -118,35 +118,66 @@ const fallingEntityFactory = (domElement, type) => {
 
 const playerFactory = (width = 100, height = 100) => {
   const player = document.getElementById("player");
+  const playerSpeed = 24;
+
+  let isAnimatingMoveRight = false;
+  let isAnimantingMoveLeft = false;
+
   let playerDirection = "right";
   player.style.display = "block";
   player.setAttribute("width", `${width}`);
   player.setAttribute("height", `${height}`);
 
   const offsets = player.getBoundingClientRect();
-  let positionX = offsets.left;
 
+  let positionX = offsets.left;
   let isAlive = true;
 
   return {
     width,
     height,
     moveLeft: () => {
-      positionX -= 12;
-      player.style.left = positionX + "px";
+      !player.classList.contains("player--moving") &&
+        player.classList.add("player--moving");
       player.classList.remove("player--right");
       player.classList.add("player--left");
-      !player.classList.contains("player--moving") &&
-        player.classList.add("player--moving");
+
+      if (!isAnimatingMoveRight) {
+        player.style.left = positionX + "px";
+      }
+
+      if (!isAnimantingMoveLeft) {
+        isAnimantingMoveLeft = true;
+        setTimeout(() => {
+          if (!isAnimatingMoveRight) {
+            positionX -= playerSpeed;
+          }
+          isAnimantingMoveLeft = false;
+        }, 500);
+      }
+
       playerDirection = "left";
+      player.style.left = positionX + "px";
     },
     moveRight: () => {
-      positionX += 12;
-      player.style.left = positionX + "px";
-      player.classList.remove("player--left");
-      player.classList.add("player--right");
       !player.classList.contains("player--moving") &&
         player.classList.add("player--moving");
+      player.classList.remove("player--left");
+      player.classList.add("player--right");
+      if (!isAnimantingMoveLeft) {
+        player.style.left = positionX + "px";
+      }
+
+      if (!isAnimatingMoveRight) {
+        isAnimatingMoveRight = true;
+        setTimeout(() => {
+          if (!isAnimantingMoveLeft) {
+            positionX += playerSpeed;
+          }
+          isAnimatingMoveRight = false;
+        }, 500);
+      }
+
       playerDirection = "right";
     },
     domElement: player,
@@ -158,7 +189,7 @@ const playerFactory = (width = 100, height = 100) => {
         playerDirection === "right"
           ? player.classList.remove("player--jumpRight")
           : player.classList.remove("player--jumpLeft");
-      }, 800);
+      }, 1000);
     },
     idle: () => {
       player.classList.remove("player--moving");
@@ -206,10 +237,12 @@ const restarAllFallingElements = () => {
 };
 
 let isBgAudioOn = false;
+
 document.addEventListener("keydown", (e) => {
   musicPlay();
   if (player.isAlive) {
     const key = e.key;
+
     key === "ArrowRight" && player.moveRight();
     key === "ArrowLeft" && player.moveLeft();
     key === "ArrowUp" && player.jump();

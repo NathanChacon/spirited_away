@@ -4,22 +4,21 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css" />
     <title>Spirited Away Game</title>
   </head>
   <body>
     <main id="gameContainer" class="game_container">
       <audio autoplay="autoplay" loop="loop" id="bgAudio">
-        <source src="background_music.mp3" />
+        <source src="./audios/background_music.mp3" />
       </audio>
       <span class="points" id="points">0</span>
 
       <figure class="cloud cloud--left">
-        <img width="100%" height="100%" src="./CLOUDS.svg" />
+        <img width="100%" height="100%" src="./clouds.svg" />
       </figure>
 
       <figure class="cloud cloud--right">
-        <img width="100%" height="100%" src="./CLOUDS.svg" />
+        <img width="100%" height="100%" src="./clouds.svg" />
       </figure>
 
       <svg
@@ -226,5 +225,5 @@
       </div>
     </main>
   </body>
-  <script src="./index.js"></script>
+  <script src="bundle.js"></script>
 </html>

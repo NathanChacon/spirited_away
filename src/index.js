@@ -1,6 +1,6 @@
-import {playerFactory, fallingEntityFactory} from "./factories/index.js"
-import css from './index.css'
-import greenHeadIcon from "./assets/icons/green_head.svg"
+import { playerFactory, fallingEntityFactory } from "./factories/index.js";
+import css from "./index.css";
+import greenHeadIcon from "./assets/icons/green_head.svg";
 
 const createEnemyDomElement = () => {
   const image = document.createElement("img");
@@ -33,12 +33,15 @@ const generateCoins = (numberOfCoins) => {
 };
 
 const generateEnemies = () => {
-  const enemyWidth = document.body.clientWidth > 764 ? 58 : 36
+  const enemyWidth = document.body.clientWidth > 764 ? 58 : 36;
 
-  const numberOfEnimiesThatFitTheScreen = Math.floor(document.body.clientWidth/enemyWidth) 
-  const numberOfEnimiesToGenerate = Math.floor(((30/100) * numberOfEnimiesThatFitTheScreen))
-  console.log(numberOfEnimiesThatFitTheScreen)
-  console.log(numberOfEnimiesToGenerate)
+  const numberOfEnimiesThatFitTheScreen = Math.floor(
+    document.body.clientWidth / enemyWidth
+  );
+  const numberOfEnimiesToGenerate = Math.floor(
+    (30 / 100) * numberOfEnimiesThatFitTheScreen
+  );
+
   const enemies = [];
   for (let i = 0; i < numberOfEnimiesToGenerate; i++) {
     enemies.push(fallingEntityFactory(createEnemyDomElement(), "enemy", 2));
@@ -63,7 +66,6 @@ window.onload = () => {
   const restartButton = document.getElementById("restartButton");
   restartButton.onclick = () => onClickRestart();
 };
-
 
 document.addEventListener("keydown", (e) => {
   musicPlay();

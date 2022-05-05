@@ -51,7 +51,6 @@ const generateEnemies = () => {
 };
 
 let dragonXPosition = 0;
-const dragonWidth = document.getElementById("dragon").clientWidth;
 
 let playerPoints = 0;
 let player = playerFactory(34);
@@ -122,12 +121,14 @@ const playCoinAudio = () => {
 const moveDragon = () => {
   dragonXPosition++;
   const dragon = document.getElementById("dragon");
-  dragon.style.left = dragonXPosition;
+  const dragonWidth = document.getElementById("dragon").clientWidth;
 
-  if (dragonXPosition >= document.body.clientWidth + dragonWidth) {
+  if (dragon.getBoundingClientRect().left >= document.body.clientWidth) {
     dragonXPosition = 0;
     dragon.style.left = `${-dragonWidth}px`;
   }
+
+  dragon.style.left = dragonXPosition;
 };
 
 const musicPlay = () => {

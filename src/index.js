@@ -51,6 +51,7 @@ const generateEnemies = () => {
 };
 
 let dragonXPosition = 0;
+let susuWatarisXPosition = 0;
 
 let playerPoints = 0;
 let player = playerFactory(34);
@@ -131,6 +132,19 @@ const moveDragon = () => {
   dragon.style.left = dragonXPosition;
 };
 
+const moveSusuWataris = () => {
+  susuWatarisXPosition++;
+  const susuwataris = document.getElementById("susuwataris");
+  const susuwatarisWidth = susuwataris.clientWidth;
+
+  if (susuwataris.getBoundingClientRect().right < 0) {
+    susuWatarisXPosition = -susuwatarisWidth;
+    susuwataris.style.right = `${-susuwatarisWidth}px`;
+  }
+
+  susuwataris.style.right = susuWatarisXPosition;
+};
+
 const musicPlay = () => {
   !isBgAudioOn && document.getElementById("bgAudio").play();
   isBgAudioOn = true;
@@ -138,6 +152,7 @@ const musicPlay = () => {
 
 const startGame = () => {
   moveDragon();
+  moveSusuWataris();
   fallingElements.forEach((fallingElement) => {
     if (fallingElement.isCollidedWithPlayer(player)) {
       if (fallingElement.type === "coin") {

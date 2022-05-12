@@ -133,7 +133,7 @@ const moveDragon = () => {
 };
 
 const moveSusuWataris = () => {
-  susuWatarisXPosition++;
+  susuWatarisXPosition += 2.2;
   const susuwataris = document.getElementById("susuwataris");
   const susuwatarisWidth = susuwataris.clientWidth;
 
